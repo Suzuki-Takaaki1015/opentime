@@ -28,6 +28,7 @@ graph TD
     subgraph Rules [GitHub運用ルール]
         direction TB
         subgraph Branch_Commit [ブランチ・コミット規則]
+            direction TB
             r1["作業はすべて main からブランチを作成<br>※使い捨てブランチ禁止"]:::rule
             r2["【命名規則】<br>feature/Issue番号-名前<br>fix/Issue番号-名前<br>hotfix/Issue番号-名前<br>docs/Issue番号-名前"]:::rule
             r3["【コミット規則】<br>先頭にIssue番号を入れる<br>例: 10-〇〇を追加"]:::rule
@@ -35,6 +36,7 @@ graph TD
         end
 
         subgraph Merge [マージ規則]
+            direction TB
             m1["作業完了後は main へ向けた PR を作成"]:::rule
             m2["PRには 1人以上のレビュアー を設定"]:::rule
             m3["レビュアーの承認 (Approve) が<br>1つ以上でマージ可能"]:::highlight
