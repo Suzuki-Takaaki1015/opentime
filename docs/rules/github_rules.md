@@ -1,55 +1,41 @@
-graph TD
-    %% スタイル定義
-    classDef dir fill:#e1f5fe,stroke:#039be5,stroke-width:2px,color:#000
-    classDef rule fill:#fff3e0,stroke:#fb8c00,stroke-width:2px,color:#000
-    classDef flow fill:#e8f5e9,stroke:#43a047,stroke-width:2px,color:#000
-    classDef highlight fill:#ffe0b2,stroke:#f57c00,stroke-width:2px,color:#000
+# GitHub 運用ルール
 
-    subgraph Directory [ディレクトリ構造]
-        direction TB
-        root["opentime/"]:::dir
-        github[".github/"]:::dir
-        issue_tpl["ISSUE_TEMPLATE"]
-        pr_tpl["PULL_REQUEST_TEMPLATE.md"]
-        docs["/docs<br>(要件定義, 名簿, 議事録など)"]:::dir
-        hardware["/hardware<br>(CM4キャリアボード, 筐体CADなど)"]:::dir
-        software["/software<br>(LED制御, NTP設定, UIなど)"]:::dir
-        readme["README.md<br>(プロジェクト説明)"]
-        
-        root --> github
-        github --> issue_tpl
-        github --> pr_tpl
-        root --> docs
-        root --> hardware
-        root --> software
-        root --> readme
-    end
+## 1. ディレクトリ構造
+* `.github/`：IssueやPRのテンプレート（`ISSUE_TEMPLATE`、`PULL_REQUEST_TEMPLATE.md`）
+* `docs/`：要件定義、安全対策、その他ルール、議事録、開発メンバー名簿
+* `hardware/`：ハードウェア関連データ（CM4キャリアボードの回路図、筐体CADなど）
+* `software/`：ソフトウェア関連データ（LED制御、NTP設定、UIなど）
+* `README.md`：プロジェクトの説明
 
-    subgraph Rules [GitHub運用ルール]
-        direction TB
-        subgraph Branch_Commit [ブランチ・コミット規則]
-            direction TB
-            r1["作業はすべて main からブランチを作成<br>※使い捨てブランチ禁止"]:::rule
-            r2["【命名規則】<br>feature/Issue番号-名前<br>fix/Issue番号-名前<br>hotfix/Issue番号-名前<br>docs/Issue番号-名前"]:::rule
-            r3["【コミット規則】<br>先頭にIssue番号を入れる<br>例: 10-〇〇を追加"]:::rule
-            r1 --> r2 --> r3
-        end
+## 2. 基本ルール
+* 機能開発・バグ修正・ドキュメント作成は、すべて `main` から新しくブランチを切って行うこと。
+* 作業後は必ず `main` に向けてPull Request（PR）を作成し、レビューを挟んでマージすること。
+* 作業スペースとしての**使い捨てブランチは一切禁止**。
 
-        subgraph Merge [マージ規則]
-            direction TB
-            m1["作業完了後は main へ向けた PR を作成"]:::rule
-            m2["PRには 1人以上のレビュアー を設定"]:::rule
-            m3["レビュアーの承認 (Approve) が<br>1つ以上でマージ可能"]:::highlight
-            m1 --> m2 --> m3
-        end
-    end
+## 3. ブランチ命名規則
+ブランチを作成する場合は、以下の例に倣って作成すること。
+* **機能開発:** `feature/Issue番号-分かりやすい名前`
+* **バグ修正:** `fix/Issue番号-分かりやすい名前`
+* **緊急の修正:** `hotfix/Issue番号-分かりやすい名前`
+* **ドキュメント:** `docs/Issue番号-分かりやすい名前`
+* **その他:** `Issue番号-分かりやすい名前`
 
-    subgraph Onboarding [新規メンバー オンボーディングフロー]
-        direction LR
-        step1["① Issue作成<br>(githubの使い方を共有する-名前)"]:::flow
-        step2["② ブランチ作成 ＆<br>/docs 開発メンバー名簿を編集"]:::flow
-        step3["③ PR作成 ＆<br>既存メンバーが確認・承認"]:::flow
-        step4["④ mainへマージ<br>(名簿更新＆成功体験の獲得)"]:::highlight
-        
-        step1 --> step2 --> step3 --> step4
-    end
+## 4. コミットメッセージルール
+コミットメッセージでは、**必ず先頭にIssue番号を入れる**こと。
+* **形式:** `Issue番号-メッセージ`
+* **例:** `10-READMEにルールを追加`
+
+## 5. マージルール
+Pull Requestを承認・マージする際のルール。
+* PRには**必ず1人以上のレビュアー**を設定すること。
+* レビュアーによる**承認（Approve）が1つ以上**なければ `main` にマージできない。
+
+## 6. 新規メンバーの参加フロー（オンボーディング）
+新たに開発に加わるメンバーが増えたら、以下の流れを必ず通すこと。
+
+1. Issueに「githubの使い方を共有する-名前」を追加する。
+2. 新規メンバーがブランチルールに従ってブランチを作成し、`/docs` 内の「開発メンバー名簿」を編集する。
+3. マージルールに従ってPRを作成し、既存メンバーが確認・承認を行う。
+4. `main` ブランチへマージし、開発メンバー名簿の更新を行う。
+
+> ※この過程を必ず行うことで、現在行っている開発を止めることなく「最初の成功体験」を作ることができる。また、名簿をシステム上で常に最新の状態に自動更新できる。
